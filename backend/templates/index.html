@@ -3,380 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CerebroAgri - Smart Farming Assistant</title>
+    <title>AgroMind AI | Premium Farming Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-light: #e8f5e9;
-            --text-dark: #1b5e20;
-            --bg-color: #f5f5f5;
-            --card-bg: #ffffff;
-            --border-color: #e0e0e0;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: #333;
-        }
-
-        .navbar {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .navbar h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        .main-container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
-        }
-
-        .tab-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: #555;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--primary-light);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-        }
-
-        .module { display: none; }
-        .module.active { display: block; animation: fadeIn 0.3s; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .input-group {
-            margin-bottom: 1rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        input[type="number"], input[type="text"], select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            width: 100%;
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover { background: #1b5e20; }
-        .btn-secondary { background: #f5f5f5; color: #333; border: 1px solid #ccc; }
-        
-        .result-box {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            border-radius: 4px;
-            display: none;
-        }
-
-        .drag-area {
-            border: 2px dashed var(--primary);
-            padding: 2rem;
-            text-align: center;
-            border-radius: 8px;
-            background: #fafafa;
-            cursor: pointer;
-        }
-
-        /* Voice Button */
-        .voice-btn {
-            background: #d32f2f;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem auto;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(211,47,47,0.3);
-        }
-        .voice-btn.recording {
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211,47,47,0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(211,47,47,0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211,47,47,0); }
-        }
-
-        .treatment-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .treatment-panel {
-            background: white; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: #0c0a09; color: #e7e5e4; }
+        .glass-panel { background: rgba(28, 25, 23, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(68, 64, 60, 0.3); }
+        .tab-active { background: #166534; color: #f0fdf4; box-shadow: 0 0 15px rgba(22, 101, 52, 0.5); }
+        .hero-gradient { background: linear-gradient(135deg, #064e3b 0%, #14532d 50%, #166534 100%); }
+        .pulsing { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #44403c; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="min-h-screen pb-12">
 
-    <nav class="navbar">
-        <h1>🌿 CerebroAgri Assistant</h1>
-        <div id="gps-status" style="font-size: 0.9rem;">📍 Location: Unknown</div>
-    </nav>
+    <!-- Header -->
+    <header class="p-6 flex items-center justify-between max-w-5xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-900/40">
+                <i data-lucide="sprout" class="text-white"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">AgroMind AI</h1>
+                <p class="text-xs text-stone-500 font-medium uppercase tracking-widest">Precision Agriculture</p>
+            </div>
+        </div>
+        <div id="status-badge" class="px-3 py-1 glass-panel rounded-full text-[10px] uppercase font-bold text-green-500 flex items-center gap-2">
+            <span class="w-2 h-2 bg-green-500 rounded-full pulsing"></span> Engine Online
+        </div>
+    </header>
 
-    <div class="main-container">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('crop')">🌾 Recommendation</button>
-            <button class="tab-btn" onclick="switchTab('soil')">🌱 Soil & Leaf Analysis</button>
-            <button class="tab-btn" onclick="switchTab('chat')">🤖 Farmer Chatbot</button>
+    <!-- App Container -->
+    <main class="max-w-xl mx-auto px-4 mt-4">
+        
+        <!-- Navigation Tabs -->
+        <nav class="glass-panel p-1.5 rounded-2xl flex gap-1 mb-8 overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-3 rounded-xl flex flex-col items-center gap-1 transition-all flex-1 min-w-[80px]">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Dash</span>
+            </button>
+            <button onclick="switchTab('soil')" id="btn-soil" class="tab-btn px-4 py-3 rounded-xl flex flex-col items-center gap-1 transition-all flex-1 min-w-[80px]">
+                <i data-lucide="shovels" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Soil</span>
+            </button>
+            <button onclick="switchTab('crops')" id="btn-crops" class="tab-btn px-4 py-3 rounded-xl flex flex-col items-center gap-1 transition-all flex-1 min-w-[80px]">
+                <i data-lucide="wheat" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Crops</span>
+            </button>
+            <button onclick="switchTab('disease')" id="btn-disease" class="tab-btn px-4 py-3 rounded-xl flex flex-col items-center gap-1 transition-all flex-1 min-w-[80px]">
+                <i data-lucide="leaf" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Disease</span>
+            </button>
+            <button onclick="switchTab('chat')" id="btn-chat" class="tab-btn px-4 py-3 rounded-xl flex flex-col items-center gap-1 transition-all flex-1 min-w-[80px]">
+                <i data-lucide="bot" class="w-5 h-5"></i>
+                <span class="text-[10px] font-bold">Chat</span>
+            </button>
+        </nav>
+
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="content-tab space-y-6">
+            <div class="hero-gradient p-8 rounded-3xl relative overflow-hidden shadow-2xl shadow-green-950/20">
+                <div class="relative z-10">
+                    <p class="text-green-200 text-sm font-semibold mb-1">Welcome Back</p>
+                    <h2 class="text-3xl font-bold text-white mb-2">Grow Smarter.</h2>
+                    <p class="text-green-100/70 text-sm max-w-[200px]">Real-time analytics and AI advisory for your farm.</p>
+                </div>
+                <i data-lucide="cloud-sun" class="absolute -right-6 -bottom-6 w-40 h-40 text-white/10 rotate-12"></i>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="glass-panel p-5 rounded-3xl">
+                    <p class="text-stone-500 text-xs font-bold uppercase mb-1">Soil Score</p>
+                    <div class="flex items-end gap-2">
+                        <span class="text-3xl font-bold">8.5</span>
+                        <span class="text-green-500 text-xs font-bold pb-1 flex items-center"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +2%</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 rounded-3xl">
+                    <p class="text-stone-500 text-xs font-bold uppercase mb-1">Season</p>
+                    <span class="text-3xl font-bold">Kharif</span>
+                </div>
+            </div>
+
+            <div class="bg-blue-500/10 border border-blue-500/20 p-5 rounded-3xl flex gap-4">
+                <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0">
+                    <i data-lucide="lightbulb" class="text-blue-400 w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="text-blue-200 text-xs font-bold uppercase tracking-wider mb-1">Daily Tip</h4>
+                    <p class="text-blue-100/70 text-sm leading-relaxed">Intercrop legumes with your main cereals to fix atmospheric nitrogen naturally and reduce fertilizer costs.</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Crop Recommendation -->
-        <div id="crop" class="card module active">
-            <h2>Crop Multi-Model Recommendation</h2>
-            <button class="btn btn-secondary" onclick="fetchGPS()" style="margin-bottom: 1rem;">🛰️ Auto-Detect My Location (Weather Sync)</button>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="input-group"><label>Nitrogen (N)</label><input type="number" id="inp-n" value="90"></div>
-                <div class="input-group"><label>Phosphorus (P)</label><input type="number" id="inp-p" value="42"></div>
-                <div class="input-group"><label>Potassium (K)</label><input type="number" id="inp-k" value="43"></div>
-                <div class="input-group"><label>pH Level</label><input type="number" id="inp-ph" value="6.5"></div>
+        <!-- SOIL TAB -->
+        <div id="tab-soil" class="content-tab hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl">
+                <h3 class="text-xl font-bold mb-4">Soil Diagnostics</h3>
+                <div id="soil-preview" class="w-full h-48 bg-stone-900 rounded-2xl mb-4 border-2 border-dashed border-stone-800 flex flex-col items-center justify-center text-stone-600 gap-3">
+                    <i data-lucide="camera" class="w-10 h-10"></i>
+                    <p class="text-xs font-medium">Upload soil sample image</p>
+                </div>
+                <input type="file" id="soil-upload" class="hidden" accept="image/*" onchange="previewImage(this, 'soil-preview')">
+                <button onclick="document.getElementById('soil-upload').click()" class="w-full py-4 glass-panel rounded-2xl font-bold text-sm mb-3">Choose Image</button>
+                <button onclick="analyzeSoil()" class="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-green-900/20">Run Analysis</button>
             </div>
-            
-            <button class="btn" onclick="predictCrop()">Get AI Crop Recommendations</button>
-            <div id="crop-result" class="result-box"></div>
+            <div id="soil-result" class="hidden glass-panel p-6 rounded-3xl border-l-4 border-green-500">
+                <h4 class="text-green-500 font-bold text-xs uppercase mb-1">Identification Result</h4>
+                <p id="soil-type" class="text-xl font-bold mb-4">Loamy Soil Detected</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-stone-900/50 p-4 rounded-2xl">
+                        <p class="text-stone-500 text-[10px] font-bold uppercase mb-1">pH Level</p>
+                        <p id="soil-ph" class="text-lg font-bold text-white">6.5</p>
+                    </div>
+                    <div class="bg-stone-900/50 p-4 rounded-2xl">
+                        <p class="text-stone-500 text-[10px] font-bold uppercase mb-1">Moisture</p>
+                        <p id="soil-moisture" class="text-lg font-bold text-white">56%</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Image Analysis -->
-        <div id="soil" class="card module">
-            <h2>Plant Pathology & Soil Vision</h2>
-            <p>Upload a picture of your soil or a diseased leaf.</p>
-            <div class="drag-area" onclick="document.getElementById('file-upload').click()">
-                <h3>📸 Tap to Select Image</h3>
-                <input type="file" id="file-upload" style="display: none;" onchange="analyzeImage()">
+        <!-- CROPS TAB -->
+        <div id="tab-crops" class="content-tab hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl">
+                <h3 class="text-xl font-bold mb-4 whitespace-nowrap overflow-hidden text-ellipsis">Smart Crop Planner</h3>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold uppercase text-stone-500">Nitrogen (N)</label>
+                        <input type="number" id="crop-n" value="80" class="w-full bg-stone-900 border border-stone-800 rounded-xl p-3 text-white">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold uppercase text-stone-500">Phosphorus (P)</label>
+                        <input type="number" id="crop-p" value="45" class="w-full bg-stone-900 border border-stone-800 rounded-xl p-3 text-white">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold uppercase text-stone-500">Potassium (K)</label>
+                        <input type="number" id="crop-k" value="40" class="w-full bg-stone-900 border border-stone-800 rounded-xl p-3 text-white">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold uppercase text-stone-500">Soil pH</label>
+                        <input type="number" id="crop-ph" value="6.5" step="0.1" class="w-full bg-stone-900 border border-stone-800 rounded-xl p-3 text-white">
+                    </div>
+                </div>
+                <button onclick="predictCrop()" class="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-green-900/20">Generate Recommendations</button>
             </div>
-            
-            <div class="tabs" style="margin-top: 1rem; justify-content: center;">
-                <button class="tab-btn active" id="mode-leaf" onclick="mode='leaf'">Check Leaf Disease</button>
-                <button class="tab-btn" id="mode-soil" onclick="mode='soil'">Check Soil Type</button>
+            <div id="crop-results" class="hidden space-y-4">
+                <!-- Result cards injected here -->
             </div>
-            
-            <div id="image-result" class="result-box mt-4"></div>
         </div>
 
-        <!-- Chatbot -->
-        <div id="chat" class="card module">
-            <h2 style="text-align: center;">Multilingual Voice AgriBot</h2>
-            
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <label>Language:</label>
-                <select id="chat-lang" style="width: auto; display: inline-block;">
-                    <option value="en">English</option>
-                    <option value="hi">हिंदी (Hindi)</option>
-                    <option value="te">తెలుగు (Telugu)</option>
-                    <option value="ta">தமிழ் (Tamil)</option>
-                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
-                </select>
+        <!-- DISEASE TAB -->
+        <div id="tab-disease" class="content-tab hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl">
+                <h3 class="text-xl font-bold mb-4">Pathology Scan</h3>
+                <div id="leaf-preview" class="w-full h-48 bg-stone-900 rounded-2xl mb-4 border-2 border-dashed border-stone-800 flex flex-col items-center justify-center text-stone-600 gap-3">
+                    <i data-lucide="image-plus" class="w-10 h-10"></i>
+                    <p class="text-xs font-medium">Upload infected leaf image</p>
+                </div>
+                <input type="file" id="leaf-upload" class="hidden" accept="image/*" onchange="previewImage(this, 'leaf-preview')">
+                <button onclick="document.getElementById('leaf-upload').click()" class="w-full py-4 glass-panel rounded-2xl font-bold text-sm mb-3">Choose Image</button>
+                <button onclick="analyzeLeaf()" class="w-full py-4 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-red-900/20">Start Diagnostic</button>
             </div>
-
-            <button class="voice-btn" id="voice-btn" onclick="toggleRecording()">🎤</button>
-            <p style="text-align: center; color: #666; font-size: 0.9rem;">Tap to speak or type below</p>
-            
-            <div class="input-group">
-                <input type="text" id="chat-input" placeholder="Type your farming question here...">
+            <div id="leaf-result" class="hidden space-y-4">
+                <!-- Results injected here -->
             </div>
-            <button class="btn" onclick="sendChat()">Ask AI</button>
-            <div id="chat-result" class="result-box"></div>
         </div>
-    </div>
+
+        <!-- CHAT TAB -->
+        <div id="tab-chat" class="content-tab hidden h-[600px] flex flex-col">
+            <div id="chat-window" class="flex-1 overflow-y-auto space-y-4 p-4 no-scrollbar pb-10">
+                <div class="flex justify-start">
+                    <div class="glass-panel p-4 rounded-2xl rounded-bl-none max-w-[80%]">
+                        <p class="text-sm">Namaste! How can I help you today? I understand English, Hindi, and Kannada.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 bg-stone-900/50 rounded-3xl border border-stone-800/50 flex items-center gap-3">
+                <button onclick="toggleVoice()" id="mic-btn" class="w-12 h-12 bg-stone-800 rounded-2xl flex items-center justify-center transition-all">
+                    <i data-lucide="mic" class="w-5 h-5"></i>
+                </button>
+                <input type="text" id="chat-input" placeholder="Ask your question..." class="flex-1 bg-transparent border-none outline-none text-white text-sm" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg shadow-green-900/20">
+                    <i data-lucide="send" class="w-5 h-5 text-white"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
 
     <script>
-        let mode = 'leaf';
-        let userLat = null;
-        let userLng = null;
+        // Initialize Lucide
+        lucide.createIcons();
 
+        // Navigation
         function switchTab(tabId) {
-            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+            document.querySelectorAll('.content-tab').forEach(t => t.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+            
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).classList.add('tab-active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        switchTab('dashboard');
 
-        function fetchGPS() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    userLat = pos.coords.latitude;
-                    userLng = pos.coords.longitude;
-                    document.getElementById('gps-status').innerText = `📍 Location: ${userLat.toFixed(2)}, ${userLng.toFixed(2)} (Weather Linked)`;
-                    alert("Location locked! Weather data will be factored into predictions.");
-                }, () => { alert("GPS access denied."); });
+        // Utils
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const preview = document.getElementById(previewId);
+                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-2xl shadow-lg">`;
+                    preview.classList.remove('text-stone-600');
+                }
+                reader.readAsDataURL(file);
             }
         }
 
-        async function predictCrop() {
-            const resBox = document.getElementById('crop-result');
-            resBox.style.display = 'block'; resBox.innerHTML = "Processing data through XGBoost & Random Forest...";
+        const API_URL = window.location.origin;
 
+        // Soil Analysis
+        async function analyzeSoil() {
+            const fileInput = document.getElementById('soil-upload');
+            if (!fileInput.files[0]) return alert("Please upload an image first.");
+            
+            document.getElementById('soil-result').classList.add('hidden');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const res = await fetch(`${API_URL}/api/analyze/soil`, { method: 'POST', body: formData });
+            const data = await res.json();
+            
+            document.getElementById('soil-type').innerText = data.type;
+            document.getElementById('soil-ph').innerText = data.metrics.ph;
+            document.getElementById('soil-moisture').innerText = data.metrics.moisture;
+            document.getElementById('soil-result').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Crop Prediction
+        async function predictCrop() {
             const payload = {
-                N: parseFloat(document.getElementById('inp-n').value),
-                P: parseFloat(document.getElementById('inp-p').value),
-                K: parseFloat(document.getElementById('inp-k').value),
-                ph: parseFloat(document.getElementById('inp-ph').value),
-                lat: userLat, lng: userLng
+                N: parseFloat(document.getElementById('crop-n').value),
+                P: parseFloat(document.getElementById('crop-p').value),
+                K: parseFloat(document.getElementById('crop-k').value),
+                ph: parseFloat(document.getElementById('crop-ph').value)
             };
 
-            const data = await (await fetch('/api/predict/crop', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+            const res = await fetch(`${API_URL}/api/predict/crop`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
-            })).json();
-            
-            let html = `<h3>Top Recommended Crops (${data.weather_context_fetched}):</h3><ul style="padding-left: 20px;">`;
-            data.recommendations.forEach(r => {
-                html += `<li style="margin-bottom: 10px;"><b>${r.crop}</b> (${r.confidence}%) - <i>${r.reasoning}</i></li>`;
             });
-            html += `</ul><hr><p style="font-size:0.8rem"><b>AI XAI Core:</b> ${data.explainability}</p>`;
-            resBox.innerHTML = html;
+            const data = await res.json();
+            
+            const resultsContainer = document.getElementById('crop-results');
+            resultsContainer.innerHTML = data.recommendations.map((c, i) => `
+                <div class="glass-panel p-6 rounded-3xl border-l-4 ${i === 0 ? 'border-green-500' : 'border-stone-700'}">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-black uppercase text-stone-500">${i+1}. Recommendation</span>
+                        <span class="bg-green-500/10 text-green-500 text-[10px] font-black px-2 py-1 rounded-full">${c.confidence}% Match</span>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-2">${c.crop}</h4>
+                    <p class="text-sm text-stone-400 leading-relaxed">${c.reasoning}</p>
+                </div>
+            `).join('');
+            resultsContainer.classList.remove('hidden');
         }
 
-        async function analyzeImage() {
-            const file = document.getElementById('file-upload').files[0];
-            if (!file) return;
+        // Disease Analysis
+        async function analyzeLeaf() {
+            const fileInput = document.getElementById('leaf-upload');
+            if (!fileInput.files[0]) return alert("Please upload an image first.");
             
-            const resBox = document.getElementById('image-result');
-            resBox.style.display = 'block'; resBox.innerHTML = "Running Image through CNN (ResNet/YOLOv8)...";
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
 
-            const formData = new FormData(); formData.append('file', file);
-            const endpoint = mode === 'leaf' ? '/api/analyze/leaf' : '/api/analyze/soil';
-            const data = await (await fetch(endpoint, { method: 'POST', body: formData })).json();
+            const res = await fetch(`${API_URL}/api/analyze/leaf`, { method: 'POST', body: formData });
+            const data = await res.json();
             
-            if (mode === 'leaf') {
-                resBox.innerHTML = `
-                    <h3 style="color: #d32f2f;">Detected: ${data.disease_name} (${data.confidence_score}%)</h3>
-                    <p><b>Causes:</b> ${data.treatment_plan.causes}</p>
-                    <p><b>Prevention:</b> ${data.treatment_plan.prevention}</p>
-                    <div class="treatment-grid">
-                        <div class="treatment-panel" style="border-top: 3px solid green;">
-                            <h4>Organic Treatment</h4>
-                            <p>${data.treatment_plan.organic_med}</p>
+            const resultsContainer = document.getElementById('leaf-result');
+            const info = data.treatment_info;
+            resultsContainer.innerHTML = `
+                <div class="glass-panel p-6 rounded-3xl border-l-4 border-red-500">
+                    <h4 class="text-red-500 font-bold text-xs uppercase mb-1">Detected Pathogen</h4>
+                    <p class="text-2xl font-bold mb-4">${data.detected}</p>
+                    <div class="space-y-4">
+                        <div class="bg-stone-900/50 p-4 rounded-xl">
+                            <h5 class="text-stone-500 text-[10px] font-black uppercase mb-1">Causal Agent</h5>
+                            <p class="text-sm">${info.causes}</p>
                         </div>
-                        <div class="treatment-panel" style="border-top: 3px solid red;">
-                            <h4>Chemical Treatment & Dosage</h4>
-                            <p><b>Medicine:</b> ${data.treatment_plan.chemical_med}</p>
-                            <p><b>Dosage:</b> ${data.treatment_plan.dosage}</p>
+                        <div class="bg-green-500/10 p-4 rounded-xl border border-green-500/20">
+                            <h5 class="text-green-500 text-[10px] font-black uppercase mb-1">Organic Cure</h5>
+                            <p class="text-sm text-green-100">${info.organic_med}</p>
                         </div>
-                    </div>`;
-            } else {
-                resBox.innerHTML = `
-                    <h3>Soil Type Detected: ${data.soil_type}</h3>
-                    <p><b>AI Estimated pH Proxy:</b> ${data.predicted_ph_proxy}</p>
-                    <p><b>Estimated Moisture Level:</b> ${data.estimated_moisture}</p>
-                `;
-            }
+                        <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
+                            <h5 class="text-blue-500 text-[10px] font-black uppercase mb-1">Chemical Dosage</h5>
+                            <p class="text-sm text-blue-100">${info.chemical_med} @ ${info.dosage}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            resultsContainer.classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
-        // --- Voice & Chat Logic ---
-        let recognition = null;
+        // Chatbot
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            appendMessage('user', message);
+            input.value = '';
+
+            const res = await fetch(`${API_URL}/api/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+            const data = await res.json();
+            appendMessage('assistant', data.response);
+        }
+
+        function appendMessage(role, text) {
+            const window = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+            div.innerHTML = `
+                <div class="${role === 'user' ? 'bg-green-600 text-white' : 'glass-panel text-white'} p-4 rounded-2xl ${role === 'user' ? 'rounded-br-none' : 'rounded-bl-none'} max-w-[80%]">
+                    <p class="text-sm">${text}</p>
+                </div>
+            `;
+            window.appendChild(div);
+            window.scrollTo({ top: window.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Voice Input
+        let recognition;
+        let isListening = false;
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-        }
-
-        function toggleRecording() {
-            if (!recognition) return alert("Voice input not supported in your browser.");
-            
-            const btn = document.getElementById('voice-btn');
-            const langMap = { 'en': 'en-US', 'hi': 'hi-IN', 'ta': 'ta-IN', 'te': 'te-IN', 'kn': 'kn-IN' };
-            recognition.lang = langMap[document.getElementById('chat-lang').value];
-
-            if (btn.classList.contains('recording')) {
-                recognition.stop(); btn.classList.remove('recording');
-            } else {
-                recognition.start(); btn.classList.add('recording');
-                recognition.onresult = (e) => {
-                    document.getElementById('chat-input').value = e.results[0][0].transcript;
-                    sendChat();
-                };
-                recognition.onend = () => { btn.classList.remove('recording'); };
+            recognition.onresult = (e) => {
+                const transcript = e.results[0][0].transcript;
+                appendMessage('user', transcript);
+                // Trigger actual backend call manually here to mimic full integration
+                fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: transcript })
+                }).then(r => r.json()).then(d => appendMessage('assistant', d.response));
+            }
+            recognition.onend = () => {
+                isListening = false;
+                document.getElementById('mic-btn').classList.remove('bg-red-600');
+                document.getElementById('mic-btn').innerHTML = `<i data-lucide="mic" class="w-5 h-5"></i>`;
+                lucide.createIcons();
             }
         }
 
-        async function sendChat() {
-            const input = document.getElementById('chat-input').value;
-            const lang = document.getElementById('chat-lang').value;
-            const resBox = document.getElementById('chat-result');
-            
-            resBox.style.display = 'block'; resBox.innerHTML = "Consulting RAG Agricultural Database...";
-
-            const data = await (await fetch('/api/chat', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: input, language: lang })
-            })).json();
-            
-            resBox.innerHTML = `<p><b>AI:</b> ${data.reply}</p>`;
-            
-            // TTS Voice Output
-            const utterance = new SpeechSynthesisUtterance(data.reply);
-            const langMap = { 'en': 'en-US', 'hi': 'hi-IN', 'ta': 'ta-IN', 'te': 'te-IN', 'kn': 'kn-IN' };
-            utterance.lang = langMap[lang];
-            window.speechSynthesis.speak(utterance);
+        function toggleVoice() {
+            if (!recognition) return alert("Voice speech not supported in this browser.");
+            if (isListening) {
+                recognition.stop();
+            } else {
+                isListening = true;
+                document.getElementById('mic-btn').classList.add('bg-red-600');
+                document.getElementById('mic-btn').innerHTML = `<i data-lucide="mic-off" class="w-5 h-5 text-white"></i>`;
+                lucide.createIcons();
+                recognition.start();
+            }
         }
     </script>
 </body>

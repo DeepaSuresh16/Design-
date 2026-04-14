@@ -1,8 +1,0 @@
-streamlit==1.40.1
-fastapi
-uvicorn
-pydantic
-numpy
-streamlit-mic-recorder
-SpeechRecognition
-pydub
