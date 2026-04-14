@@ -3,3 +3,6 @@ fastapi
 uvicorn
 pydantic
 numpy
+streamlit-mic-recorder
+SpeechRecognition
+pydub

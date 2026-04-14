@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_mic_recorder import speech_to_text
 import time
 import random
 
@@ -121,23 +122,31 @@ elif app_mode == "🌱 Soil Analysis":
 # ─── RAG CHATBOT ───────────────────────────────────────────────
 elif app_mode == "🤖 RAG Chatbot":
     st.title("🤖 Multilingual Farmer's Chatbot")
-    st.write("Powered by RAG agricultural databases.")
+    st.write("Powered by RAG agricultural databases. You can type below or use your microphone!")
     
     if "messages" not in st.session_state:
         st.session_state.messages = [{"role": "assistant", "content": "How can I help you farm better today? (Supports English, Hindi, Kannada, Telugu)"}]
         
     for msg in st.session_state.messages:
-        curr_role = msg["role"]
-        with st.chat_message(curr_role):
+        with st.chat_message(msg["role"]):
             st.write(msg["content"])
             
-    if prompt := st.chat_input("Ask a farming question..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"): st.write(prompt)
+    # Voice Dictation
+    st.write("🎙️ **Voice Assistant:**")
+    voice_input = speech_to_text(language='en', use_container_width=True, just_once=True, key='STT')
+    
+    # Text Dictation
+    prompt = st.chat_input("Ask a farming question...")
+    
+    active_input = prompt if prompt else voice_input
+    
+    if active_input:
+        st.session_state.messages.append({"role": "user", "content": active_input})
+        with st.chat_message("user"): st.write(active_input)
         
         with st.chat_message("assistant"):
             with st.spinner("Consulting agricultural database..."):
                 time.sleep(1)
-                reply = f"Based on validated farming practices regarding '{prompt}', I recommend prioritizing organic pest control and maintaining consistent soil moisture levels."
+                reply = f"Based on validated farming practices regarding '{active_input}', I recommend prioritizing organic pest control and maintaining consistent soil moisture levels."
                 st.write(reply)
                 st.session_state.messages.append({"role": "assistant", "content": reply})
