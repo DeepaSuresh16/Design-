@@ -1,7 +1,4 @@
 from fastapi import FastAPI, UploadFile, File, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
@@ -18,9 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount Static Files and Templates
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+
 
 # --- Schemas ---
 class CropRequest(BaseModel):
@@ -37,9 +32,9 @@ class ChatMessage(BaseModel):
     language: str = 'en' # en, hi, kn, te, ta
 
 # --- UI Route ---
-@app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/")
+async def read_root():
+    return {"status": "AgroMind AI Backend is Running Locally & on Render!", "frontend_notice": "Please visit the Next.js frontend."}
 
 # --- ML Endpoints ---
 @app.post("/api/predict/crop")
