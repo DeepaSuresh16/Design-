@@ -30,7 +30,7 @@ async def read_root():
             content = f.read()
         return HTMLResponse(content=content)
     except Exception as e:
-        return HTMLResponse(content=f"<h1>AgroMind AI - Deployment Info</h1><p>Error loading interface: {str(e)}</p><p>Please check if 'backend/templates/index.html' exists in your repo.</p>")
+        return HTMLResponse(content=f"<h1>AgroMind AI - Deployment Info</h1><p>Error loading interface: {str(e)}</p>")
 
 # --- Schemas ---
 class CropRequest(BaseModel):
@@ -60,8 +60,6 @@ async def predict_crop(data: CropRequest):
 async def analyze_leaf(file: UploadFile = File(...)):
     time.sleep(1)
     filename = file.filename.lower()
-    
-    # Pathogen Recognition Logic
     if "wheat" in filename or "rust" in filename: detected = "Wheat Rust"
     elif "corn" in filename or "smut" in filename: detected = "Corn Smut"
     elif "tomato" in filename or "blight" in filename: detected = "Tomato Early Blight"
@@ -77,28 +75,48 @@ async def analyze_leaf(file: UploadFile = File(...)):
         'Potato Early Blight': {"causes": "Alternaria solani.", "chemical_med": "Mancozeb", "dosage": "2g/L", "organic_med": "Organic copper."},
         'Grape Black Rot': {"causes": "Guignardia bidwelli.", "chemical_med": "Myclobutanil", "dosage": "2.5g/L", "organic_med": "Liquid copper soap."}
     }
-    
-    return {
-        "detected": detected,
-        "confidence": round(random.uniform(94, 99.8), 2),
-        "treatment_info": treatment_db.get(detected, treatment_db['Potato Early Blight'])
-    }
+    return {"detected": detected, "confidence": round(random.uniform(94, 99.8), 2), "treatment_info": treatment_db.get(detected, treatment_db['Potato Early Blight'])}
 
 @app.post("/api/analyze/soil")
 async def analyze_soil(file: UploadFile = File(...)):
-    time.sleep(1)
-    filename = file.filename.lower()
+    time.sleep(1.2)
+    fn = file.filename.lower()
     
-    if "red" in filename:
-        res = {"type": "Red Soil Detected", "metrics": {"ph": "5.8 (Acidic)", "moisture": "20% (Dry)"}}
-    elif "black" in filename or "regur" in filename:
-        res = {"type": "Black Cotton Soil", "metrics": {"ph": "7.2 (Stable)", "moisture": "78% (Wet)"}}
-    elif "clay" in filename:
-        res = {"type": "Clay Soil", "metrics": {"ph": "7.8 (Alkaline)", "moisture": "88% (Saturated)"}}
+    if "red" in fn:
+        return {
+            "type": "Red Soil (Oxisol)",
+            "color": "Reddish-Brown / Rusty",
+            "metrics": {"ph": "5.6 (Acidic)", "moisture": "22%"},
+            "recommendation": "Best for Groundnuts, Ragi, and Tobacco. Needs lime for pH correction."
+        }
+    elif "black" in fn or "regur" in fn:
+        return {
+            "type": "Black Cotton Soil",
+            "color": "Deep Black / Charcoal",
+            "metrics": {"ph": "7.5 (Alkaline)", "moisture": "82%"},
+            "recommendation": "Ideal for Cotton, Wheat, and Chillies. High water retention capability."
+        }
+    elif "clay" in fn:
+        return {
+            "type": "Clayey Soil",
+            "color": "Greyish / Dark Brown",
+            "metrics": {"ph": "7.8 (Alkaline)", "moisture": "90%"},
+            "recommendation": "Supports Rice, Sugarcane, and Jute. Needs proper drainage management."
+        }
+    elif "sand" in fn or "yellow" in fn:
+        return {
+            "type": "Sandy Soil",
+            "color": "Yellow / Light Beige",
+            "metrics": {"ph": "5.5 (Acidic)", "moisture": "15%"},
+            "recommendation": "Good for Watermelon, Cactus, and Coconut with heavy organic manure."
+        }
     else:
-        res = {"type": "Loamy Soil", "metrics": {"ph": "6.5 (Optimal)", "moisture": "56% (Moist)"}}
-    
-    return res
+        return {
+            "type": "Alluvial / Loamy Soil",
+            "color": "Soft Brown",
+            "metrics": {"ph": "6.8 (Neutral)", "moisture": "60%"},
+            "recommendation": "Perfect for most crops like Rice, Wheat, and Vegetables. Highly fertile."
+        }
 
 @app.post("/api/chat")
 async def chat(data: ChatMessage):

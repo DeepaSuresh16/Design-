@@ -113,16 +113,23 @@
             </div>
             <div id="soil-result" class="hidden glass-panel p-6 rounded-3xl border-l-4 border-green-500">
                 <h4 class="text-green-500 font-bold text-xs uppercase mb-1">Identification Result</h4>
-                <p id="soil-type" class="text-xl font-bold mb-4">Loamy Soil Detected</p>
-                <div class="grid grid-cols-2 gap-4">
+                <p id="soil-type" class="text-xl font-bold mb-2">Soil Detected</p>
+                <p id="soil-color" class="text-stone-400 text-xs font-medium mb-4 italic italic"></p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="bg-stone-900/50 p-4 rounded-2xl">
                         <p class="text-stone-500 text-[10px] font-bold uppercase mb-1">pH Level</p>
-                        <p id="soil-ph" class="text-lg font-bold text-white">6.5</p>
+                        <p id="soil-ph" class="text-lg font-bold text-white">--</p>
                     </div>
                     <div class="bg-stone-900/50 p-4 rounded-2xl">
                         <p class="text-stone-500 text-[10px] font-bold uppercase mb-1">Moisture</p>
-                        <p id="soil-moisture" class="text-lg font-bold text-white">56%</p>
+                        <p id="soil-moisture" class="text-lg font-bold text-white">--</p>
                     </div>
+                </div>
+
+                <div class="bg-green-500/10 border border-green-500/20 p-4 rounded-2xl">
+                    <h5 class="text-green-500 text-[10px] font-black uppercase mb-1">Regional Crop Recommendation</h5>
+                    <p id="soil-rec" class="text-sm text-green-100/90 leading-snug"></p>
                 </div>
             </div>
         </div>
@@ -240,8 +247,11 @@
             const data = await res.json();
             
             document.getElementById('soil-type').innerText = data.type;
+            document.getElementById('soil-color').innerText = `Detected Color Path: ${data.color}`;
             document.getElementById('soil-ph').innerText = data.metrics.ph;
             document.getElementById('soil-moisture').innerText = data.metrics.moisture;
+            document.getElementById('soil-rec').innerText = data.recommendation;
+            
             document.getElementById('soil-result').classList.remove('hidden');
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
@@ -354,7 +364,6 @@
             recognition.onresult = (e) => {
                 const transcript = e.results[0][0].transcript;
                 appendMessage('user', transcript);
-                // Trigger actual backend call manually here to mimic full integration
                 fetch(`${API_URL}/api/chat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
