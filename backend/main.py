@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, Request
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
@@ -15,8 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-
 # --- Schemas ---
 class CropRequest(BaseModel):
     N: Optional[float] = None
@@ -32,9 +31,37 @@ class ChatMessage(BaseModel):
     language: str = 'en' # en, hi, kn, te, ta
 
 # --- UI Route ---
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def read_root():
-    return {"status": "AgroMind AI Backend is Running Locally & on Render!", "frontend_notice": "Please visit the Next.js frontend."}
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AgroMind AI - Backend API</title>
+        <style>
+            body { font-family: 'Inter', system-ui, sans-serif; background-color: #f0fdf4; color: #166534; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+            .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 500px; }
+            h1 { font-size: 24px; margin-bottom: 10px; }
+            p { color: #4b5563; line-height: 1.6; }
+            .badge { display: inline-block; background: #dcfce7; color: #15803d; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 14px; margin-bottom: 20px; }
+            .docs-btn { display: inline-block; margin-top: 20px; background: #16a34a; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: 0.2s; }
+            .docs-btn:hover { background: #15803d; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="badge">🟢 System Online</div>
+            <h1>AgroMind AI Engine</h1>
+            <p>This is the Machine Learning and Data API serving predictions, visual pathology, and RAG chatbot streams.</p>
+            <p><strong>Note:</strong> You are viewing the raw backend server.</p>
+            <a href="/docs" class="docs-btn">View API Documentation (Swagger)</a>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
 
 # --- ML Endpoints ---
 @app.post("/api/predict/crop")
