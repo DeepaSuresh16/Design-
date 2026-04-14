@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Request
+from fastapi import FastAPI, UploadFile, File, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -30,7 +30,7 @@ async def read_root():
             content = f.read()
         return HTMLResponse(content=content)
     except Exception as e:
-        return HTMLResponse(content=f"<h1>AgroMind AI - Deployment Info</h1><p>Error loading interface: {str(e)}</p>")
+        return HTMLResponse(content=f"<h1>AgroMind AI - Deployment Info</h1><p>Error loading interface</p>")
 
 # --- Schemas ---
 class CropRequest(BaseModel):
@@ -78,44 +78,53 @@ async def analyze_leaf(file: UploadFile = File(...)):
     return {"detected": detected, "confidence": round(random.uniform(94, 99.8), 2), "treatment_info": treatment_db.get(detected, treatment_db['Potato Early Blight'])}
 
 @app.post("/api/analyze/soil")
-async def analyze_soil(file: UploadFile = File(...)):
-    time.sleep(1.2)
+async def analyze_soil(file: UploadFile = File(...), category: str = Form("auto")):
+    time.sleep(1.5)
     fn = file.filename.lower()
     
-    if "red" in fn:
+    # Combined Logic: Category Override or Keyword Search
+    mode = category.lower()
+    if mode == "auto":
+        if "red" in fn: mode = "red"
+        elif "black" in fn or "regur" in fn: mode = "black"
+        elif "clay" in fn: mode = "clay"
+        elif "sand" in fn or "yellow" in fn: mode = "sand"
+        else: mode = "loamy"
+
+    if mode == "red":
         return {
             "type": "Red Soil (Oxisol)",
             "color": "Reddish-Brown / Rusty",
             "metrics": {"ph": "5.6 (Acidic)", "moisture": "22%"},
-            "recommendation": "Best for Groundnuts, Ragi, and Tobacco. Needs lime for pH correction."
+            "recommendation": "Best for Groundnuts, Ragi, and Tobacco. Common in Southern/Eastern India."
         }
-    elif "black" in fn or "regur" in fn:
+    elif mode == "black":
         return {
             "type": "Black Cotton Soil",
             "color": "Deep Black / Charcoal",
             "metrics": {"ph": "7.5 (Alkaline)", "moisture": "82%"},
-            "recommendation": "Ideal for Cotton, Wheat, and Chillies. High water retention capability."
+            "recommendation": "Ideal for Cotton, Wheat, and Chillies. Common in Deccan Plateau."
         }
-    elif "clay" in fn:
+    elif mode == "clay":
         return {
             "type": "Clayey Soil",
             "color": "Greyish / Dark Brown",
             "metrics": {"ph": "7.8 (Alkaline)", "moisture": "90%"},
-            "recommendation": "Supports Rice, Sugarcane, and Jute. Needs proper drainage management."
+            "recommendation": "Supports Rice, Sugarcane, and Jute. Found in river deltas."
         }
-    elif "sand" in fn or "yellow" in fn:
+    elif mode == "sand":
         return {
             "type": "Sandy Soil",
             "color": "Yellow / Light Beige",
             "metrics": {"ph": "5.5 (Acidic)", "moisture": "15%"},
-            "recommendation": "Good for Watermelon, Cactus, and Coconut with heavy organic manure."
+            "recommendation": "Good for Watermelon, Cactus, and Coconut. Found in desert/coastal areas."
         }
     else:
         return {
             "type": "Alluvial / Loamy Soil",
-            "color": "Soft Brown",
+            "color": "Soft Brown / Rich Earth",
             "metrics": {"ph": "6.8 (Neutral)", "moisture": "60%"},
-            "recommendation": "Perfect for most crops like Rice, Wheat, and Vegetables. Highly fertile."
+            "recommendation": "Perfect for Rice, Wheat, and Vegetables. Found in Indo-Gangetic plains."
         }
 
 @app.post("/api/chat")

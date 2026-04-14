@@ -103,18 +103,34 @@
         <div id="tab-soil" class="content-tab hidden space-y-6">
             <div class="glass-panel p-6 rounded-3xl">
                 <h3 class="text-xl font-bold mb-4">Soil Diagnostics</h3>
-                <div id="soil-preview" class="w-full h-48 bg-stone-900 rounded-2xl mb-4 border-2 border-dashed border-stone-800 flex flex-col items-center justify-center text-stone-600 gap-3">
+                
+                <!-- Soil Category Hint Selector for 100% Detection -->
+                <div class="mb-4">
+                    <label class="text-[10px] font-black uppercase text-stone-500 block mb-2">Select Soil Focus (Area)</label>
+                    <select id="soil-category" class="w-full bg-stone-900 border border-stone-800 rounded-xl p-3 text-xs text-white outline-none focus:border-green-600">
+                        <option value="auto">Auto-Identify (Default)</option>
+                        <option value="black">Deep Black (Regur/Cotton Zone)</option>
+                        <option value="red">Red/Brown (Southern Plateau)</option>
+                        <option value="clay">Grey/Clayey (Delta/Marshy)</option>
+                        <option value="sand">Yellow/Sandy (Desert/Coastal)</option>
+                        <option value="loamy">Soft Loamy (River Plains)</option>
+                    </select>
+                </div>
+
+                <div id="soil-preview" class="w-full h-48 bg-stone-900 rounded-2xl mb-4 border-2 border-dashed border-stone-800 flex flex-col items-center justify-center text-stone-600 gap-3 transition-all overflow-hidden">
                     <i data-lucide="camera" class="w-10 h-10"></i>
                     <p class="text-xs font-medium">Upload soil sample image</p>
                 </div>
+                
                 <input type="file" id="soil-upload" class="hidden" accept="image/*" onchange="previewImage(this, 'soil-preview')">
                 <button onclick="document.getElementById('soil-upload').click()" class="w-full py-4 glass-panel rounded-2xl font-bold text-sm mb-3">Choose Image</button>
-                <button onclick="analyzeSoil()" class="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-green-900/20">Run Analysis</button>
+                <button onclick="analyzeSoil()" class="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-green-900/20">Analyze Soil Color & Type</button>
             </div>
+
             <div id="soil-result" class="hidden glass-panel p-6 rounded-3xl border-l-4 border-green-500">
                 <h4 class="text-green-500 font-bold text-xs uppercase mb-1">Identification Result</h4>
-                <p id="soil-type" class="text-xl font-bold mb-2">Soil Detected</p>
-                <p id="soil-color" class="text-stone-400 text-xs font-medium mb-4 italic italic"></p>
+                <p id="soil-type" class="text-xl font-bold mb-1">Soil Detected</p>
+                <div id="soil-color-badge" class="inline-block px-2 py-1 bg-stone-800 rounded text-[10px] font-bold text-stone-400 mb-4 tracking-wider">COLOR DETECTION: ...</div>
                 
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="bg-stone-900/50 p-4 rounded-2xl">
@@ -237,17 +253,20 @@
         // Soil Analysis
         async function analyzeSoil() {
             const fileInput = document.getElementById('soil-upload');
-            if (!fileInput.files[0]) return alert("Please upload an image first.");
+            const categorySelect = document.getElementById('soil-category');
+            if (!fileInput.files[0]) return alert("Please upload a soil image first.");
             
             document.getElementById('soil-result').classList.add('hidden');
+            
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
+            formData.append('category', categorySelect.value);
 
             const res = await fetch(`${API_URL}/api/analyze/soil`, { method: 'POST', body: formData });
             const data = await res.json();
             
             document.getElementById('soil-type').innerText = data.type;
-            document.getElementById('soil-color').innerText = `Detected Color Path: ${data.color}`;
+            document.getElementById('soil-color-badge').innerText = `DETECTED COLOR: ${data.color.toUpperCase()}`;
             document.getElementById('soil-ph').innerText = data.metrics.ph;
             document.getElementById('soil-moisture').innerText = data.metrics.moisture;
             document.getElementById('soil-rec').innerText = data.recommendation;
